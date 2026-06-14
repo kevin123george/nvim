@@ -13,10 +13,18 @@ fi
 echo "==> Installing packages"
 brew install neovim lazygit lazydocker ripgrep fd
 
-# Java 17 (required for Spring Boot projects)
-if ! /usr/libexec/java_home -v 17 &>/dev/null; then
-  echo "==> Installing Java 17"
-  brew install --cask microsoft-openjdk17
+# Java (choose version)
+echo ""
+echo "Which Java version do you want to install? (e.g. 17, 21, 23 — leave blank to skip)"
+read -r JAVA_VERSION
+
+if [ -n "$JAVA_VERSION" ]; then
+  if /usr/libexec/java_home -v "$JAVA_VERSION" &>/dev/null; then
+    echo "==> Java $JAVA_VERSION already installed, skipping"
+  else
+    echo "==> Installing Java $JAVA_VERSION"
+    brew install --cask "microsoft-openjdk$JAVA_VERSION"
+  fi
 fi
 
 # Neovim config
