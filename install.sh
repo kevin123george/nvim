@@ -13,10 +13,18 @@ fi
 echo "==> Installing packages"
 brew install neovim lazygit lazydocker ripgrep fd
 
-# Java (choose version)
-echo ""
-echo "Which Java version do you want to install? (e.g. 17, 21, 23 — leave blank to skip)"
-read -r JAVA_VERSION
+# Java
+if command -v java &>/dev/null; then
+  CURRENT_JAVA=$(java -version 2>&1 | head -1)
+  echo ""
+  echo "==> Java already installed: $CURRENT_JAVA"
+  echo "Install a different version? (e.g. 17, 21, 23 — leave blank to keep current)"
+  read -r JAVA_VERSION
+else
+  echo ""
+  echo "==> No Java found. Which version to install? (e.g. 17, 21, 23 — leave blank to skip)"
+  read -r JAVA_VERSION
+fi
 
 if [ -n "$JAVA_VERSION" ]; then
   if /usr/libexec/java_home -v "$JAVA_VERSION" &>/dev/null; then
